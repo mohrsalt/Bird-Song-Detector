@@ -1,5 +1,7 @@
 # Bird-Song-Detector
 
+[![DOI](https://zenodo.org/badge/920686040.svg)](https://doi.org/10.5281/zenodo.15019122)
+
 **Bird-Song-Detector** is part of a research to improve bird vocalization identification. The Bird Song Detector is designed to detect bird vocalizations in audio files using a YOLO-based model from the [BIRDeep project](https://github.com/GrunCrow/BIRDeep_BirdSongDetector_NeuralNetworks). The system converts audio files into spectrogram images, performs bird song detection on these images, and transforms the predictions into time segments.
 
 The model has been trained on the [BIRDeep dataset](https://huggingface.co/datasets/GrunCrow/BIRDeep_AudioAnnotations), which consists of audio recordings from **Doñana National Park**, located in Huelva, Spain. As such, the detector is particularly well-suited for identifying bird songs from this region and has not been tested on data from other areas.
