@@ -104,3 +104,9 @@ The generated ZIP file will contain the predictions WAV format with the name of 
 ## License
 
 This project is licensed under the [MIT](LICENSE) License. See the LICENSE file for details.
+
+## Funding
+
+This work has received financial support from the BIRDeep project (TED2021-129871A-I00), which is funded by MICIU/AEI/10.13039/501100011033 and the ‘European Union NextGenerationEU/PRTR
+
+![Logos](assets/images/MICIU+NextG+PRTR+AEI.jpg)
