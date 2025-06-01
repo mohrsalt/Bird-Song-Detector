@@ -199,4 +199,4 @@ with demo:
     download_button.click(create_and_download_segments, inputs=audio_input, outputs=download_output)
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)
