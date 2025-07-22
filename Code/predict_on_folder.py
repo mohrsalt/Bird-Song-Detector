@@ -20,6 +20,7 @@ Variables:
 
 # Import libraries
 from ultralytics import YOLO
+from ultralytics.utils.ops import Profile
 import os
 import pandas as pd
 
@@ -43,13 +44,14 @@ for audio_file in os.listdir(audio_folder):
         audio_name = os.path.basename(audio_path).replace(".WAV", "")
         
         # Audio has to be converted to spectrogram and saved as image
-        image_path = save_spectrogram_from_audio(audio_path)
-        
+        with Profile() as dt:
+            image_path = save_spectrogram_from_audio(audio_path)
+        print("Spectrogram extraction: ",dt)
         # Perform detection on the spectrogram image using the model
         model(image_path, save_txt=True, save_conf=True)
         
         # Read txt in the output folder
-        predictions_txt = f"/home/FYP/mohor001/Bird-Song-Detector/runs/detect/predict/labels/{audio_name}.txt"
+        predictions_txt = f"/home/FYP/mohor001/Bird-Song-Detector/Code/runs/detect/predict/labels/{audio_name}.txt"
         
         if os.path.exists(predictions_txt):
             # Convert to start_second, end_second, class, confidence score:

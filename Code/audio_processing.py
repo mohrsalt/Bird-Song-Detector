@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pydub import AudioSegment
 from PIL import Image
+from ultralytics.utils.ops import Profile
 
+@Profile()
 def save_spectrogram_from_audio(audio_file):
     """
     Generate a spectrogram image from an audio file and save it to the Images folder."
@@ -37,6 +39,7 @@ def save_spectrogram_from_audio(audio_file):
 
     return output_image_path
 
+@Profile()
 def transform_coordinates_to_seconds(audio_path, prediccion_txt_path):
     image_path = audio_path.replace('Audios', 'Images').replace(".WAV", ".PNG")
 
@@ -74,6 +77,7 @@ def transform_coordinates_to_seconds(audio_path, prediccion_txt_path):
 
         print(f"Detection {i+1}: From {start_sec:.2f} to {end_sec:.2f} seconds ({score:.2f})")
 
+@Profile()
 def transform_predictions_save_segment(audio_path, prediccion_txt_path):
     image_path = audio_path.replace('Audios', 'Images').replace(".WAV", ".PNG")
 

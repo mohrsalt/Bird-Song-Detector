@@ -22,8 +22,64 @@ Variables:
 from ultralytics import YOLO
 import os
 import pandas as pd
-
+from ultralytics.utils.ops import Profile
 from audio_processing import save_spectrogram_from_audio, transform_coordinates_to_seconds, transform_predictions_save_segment
+import librosa
+import soundfile as sf
+from zipfile import ZipFile
+import tempfile
+
+def extract_segments_and_save_zip_from_txt(audio_path: str, segments_txt_path: str, output_zip_path: str = None):
+    """
+    Extracts audio segments based on a .txt file containing start_second, end_second, class, and confidence.
+    Saves all extracted segments as .wav files in a zip archive.
+
+    Args:
+        audio_path (str): Path to the original audio file.
+        segments_txt_path (str): Path to the TXT file with transformed predictions.
+        output_zip_path (str, optional): Path to the output ZIP file. Defaults to <audio_name>_segments.zip.
+    """
+    if not os.path.exists(audio_path):
+        print(f"Audio file not found: {audio_path}")
+        return
+    if not os.path.exists(segments_txt_path):
+        print(f"Prediction TXT file not found: {segments_txt_path}")
+        return
+
+    audio_name = os.path.basename(audio_path).rsplit('.', 1)[0]
+    output_zip_path = output_zip_path or f"/home/FYP/mohor001/Bird-Song-Detector/Code/runs/detect/predict/{audio_name}_segments.zip"
+
+    # Load audio
+    y, sr = librosa.load(audio_path, sr=None)
+
+    # Read segments
+    segments = []
+    with open(segments_txt_path, 'r') as f:
+        for idx, line in enumerate(f):
+            parts = line.strip().split()
+            if len(parts) < 4:
+                continue  # Skip malformed lines
+            start, end, cls, conf = map(float, parts[:4])
+            segments.append((idx, start, end, int(cls), conf))
+
+    if not segments:
+        print("No valid segments found.")
+        return
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        wav_paths = []
+        for idx, start, end, cls, conf in segments:
+            segment = y[int(start * sr):int(end * sr)]
+            filename = f"{audio_name}_segment_{idx}_class{cls}_conf{conf:.2f}.wav"
+            out_path = os.path.join(tmpdir, filename)
+            sf.write(out_path, segment, sr)
+            wav_paths.append(out_path)
+
+        with ZipFile(output_zip_path, 'w') as zipf:
+            for wav_file in wav_paths:
+                zipf.write(wav_file, os.path.basename(wav_file))
+
+    print(f"Extracted {len(wav_paths)} segments and saved to: {output_zip_path}")
 
 # Load model (Bird Song Detector from BIRDeep)
 model = YOLO("/home/FYP/mohor001/Bird-Song-Detector/Models/Bird Song Detector/weights/best.pt")
@@ -38,15 +94,20 @@ audio_path = "/home/FYP/mohor001/Bird-Song-Detector/Data/Audios/AM1_20230515_090
 
 audio_name = os.path.basename(audio_path).replace(".WAV", "")
 # Audio has to be converted to spectrogram and saved as image
-image_path = save_spectrogram_from_audio(audio_path)
+with Profile() as dt:
+    image_path = save_spectrogram_from_audio(audio_path)
+print("Spectrogram extraction: ",dt)
 
-model(image_path, save_txt=True, save_conf=True)
-
+with Profile() as dtmodel:
+    model(image_path, save_txt=True, save_conf=True)
+print("Model extraction: ",dtmodel)
 # Read txt in the output folder
 predictions_txt = f"/home/FYP/mohor001/Bird-Song-Detector/Code/runs/detect/predict/labels/{audio_name}.txt"
 
 if os.path.exists(predictions_txt):
     # Convert to start_second, end_second, class, confidence score:
     transform_predictions_save_segment(audio_path, predictions_txt)
+    extract_segments_and_save_zip_from_txt(audio_path, predictions_txt)
+
 else:
     print(f"No detections for {audio_path}")
