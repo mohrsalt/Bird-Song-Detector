@@ -1,10 +1,44 @@
-Please follow these to run the inference for one audio file
+# Bird-Song-Detector
 
-conda env create -f birdsongenv.yml
+This repository provides a pipeline to detect bird vocalizations from audio recordings using a YOLOv8-based spectrogram detector.
+
+## Setup Instructions
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/mohrsalt/Bird-Song-Detector.git
+   cd Bird-Song-Detector
+   ```
+
+2. **Create and activate the Conda environment**
+
+   ```bash
+   conda env create -f birdsongenv.yml
+   conda activate birdsongenv
+   ```
+
+## Running Inference on a Single Audio File
+
+Run the following command to perform inference on one audio file:
+
+```bash
 python3 /home/FYP/mohor001/Bird-Song-Detector/Code/predict_on_audio.py
+```
 
-Note-:
-Please remember to change the model path and audio path in predict_on_audio.py. 
-To find all the locations to change, just do Ctrl+f to search "mohor001" and replace those strings with your local paths
-The model checkpoint best.pt is inside Bird-Song-Detector/Models/Bird Song Detector/weights directory. 
-Audio examples as wav files are inside Bird-Song-Detector/Data/Audios directory.
+> ** Note:**  
+> - Edit `Code/predict_on_audio.py` to update paths.  
+> - Use `Ctrl + F` to search for occurrences of `"mohor001"` and replace them with your local path.  
+> - Ensure that both the model checkpoint and input audio file paths are correctly set.
+
+## Directory Overview
+
+- **Model Checkpoint:**  
+  `Bird-Song-Detector/Models/Bird Song Detector/weights/best.pt`
+
+- **Audio Samples:**  
+  `Bird-Song-Detector/Data/Audios/`
+
+## Output
+
+The script generates predictions including detected bounding boxes and class scores, as well as segmented audio clips packaged into a zip file. All outputs are formed in the Bird-Song-Detector/Code/runs folder.
