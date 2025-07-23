@@ -29,7 +29,7 @@
 
 
 
-conda activate BirdSongDetector
+conda activate BD
 
 BASE_PATH="/home/FYP/mohor001/Bird-Song-Detector/Code"
 
