@@ -84,6 +84,8 @@ def extract_segments_and_save_zip_from_txt(audio_path: str, segments_txt_path: s
 # Load model (Bird Song Detector from BIRDeep)
 model = YOLO("/home/FYP/mohor001/Bird-Song-Detector/Models/Bird Song Detector/weights/best.pt")
 # Clean the output folder
+model.to("cuda")
+print("Model device:", next(model.model.parameters()).device)
 import shutil
 
 # Clean the output folder
