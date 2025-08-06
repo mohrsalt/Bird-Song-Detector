@@ -18,7 +18,7 @@ def save_spectrogram_from_audio(audio_file):
     
     # Create the output path for the image
     output_image_path = audio_file.replace('Audios', 'Images').replace(".WAV", ".PNG")
-    
+    output_image_path = audio_file.replace('Audios', 'Images').replace(".wav", ".PNG")
     # Ensure the output folder exists
     os.makedirs(os.path.dirname(output_image_path), exist_ok=True)
     
