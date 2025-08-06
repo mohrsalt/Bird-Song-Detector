@@ -42,7 +42,7 @@ def save_spectrogram_from_audio(audio_file):
 @Profile()
 def transform_coordinates_to_seconds(audio_path, prediccion_txt_path):
     image_path = audio_path.replace('Audios', 'Images').replace(".WAV", ".PNG")
-
+    image_path = audio_path.replace('Audios', 'Images').replace(".wav", ".PNG")
     # Read image size
     with Image.open(image_path) as img:
         WIDTH, _ = img.size
