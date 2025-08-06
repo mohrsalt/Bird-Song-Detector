@@ -95,6 +95,7 @@ shutil.rmtree('runs', ignore_errors=True)
 audio_path = "/home/FYP/mohor001/Bird-Song-Detector/Data/Audios/AM1_20230515_090000.WAV"
 
 audio_name = os.path.basename(audio_path).replace(".WAV", "")
+audio_name = os.path.basename(audio_path).replace(".wav", "")
 # Audio has to be converted to spectrogram and saved as image
 with Profile() as dt:
     image_path = save_spectrogram_from_audio(audio_path)
@@ -113,3 +114,4 @@ if os.path.exists(predictions_txt):
 
 else:
     print(f"No detections for {audio_path}")
+
