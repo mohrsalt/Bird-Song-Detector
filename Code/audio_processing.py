@@ -81,7 +81,7 @@ def transform_coordinates_to_seconds(audio_path, prediccion_txt_path):
 @Profile()
 def transform_predictions_save_segment(audio_path, prediccion_txt_path):
     image_path = audio_path.replace('Audios', 'Images').replace(".WAV", ".PNG")
-
+    image_path = audio_path.replace('Audios', 'Images').replace(".wav", ".PNG")
     # Read image size
     with Image.open(image_path) as img:
         WIDTH, _ = img.size
@@ -122,6 +122,7 @@ def transform_predictions_save_segment(audio_path, prediccion_txt_path):
         segment = audio[start_msec:end_msec]
 
         output_path = audio_path.replace('Audios', 'Segments').replace(".WAV", f"_{start_sec:.2f}_{end_sec:.2f}_{score:.2f}.WAV")
+        output_path = audio_path.replace('Audios', 'Segments').replace(".wav", f"_{start_sec:.2f}_{end_sec:.2f}_{score:.2f}.wav")
         output_folder = os.path.dirname(output_path)
 
         # If output_folder does not exist, create it
